@@ -15,7 +15,7 @@ describe('CreateAppointments', () => {
     expect(appointment).toHaveProperty('id');
   });
 
-  it('should not be able to create a new appointment', async () => {
+  it('should not be able to create a new appointment on the same date', async () => {
     const fakeAppointmentsRepository = new FakeAppointmentsRepository();
     const createAppointmentService = new CreateAppointmentService(
       fakeAppointmentsRepository,
@@ -26,7 +26,7 @@ describe('CreateAppointments', () => {
       date: appoinmentDate,
       provider_id: '123654789',
     });
-    expect(
+    await expect(
       createAppointmentService.execute({
         date: appoinmentDate,
         provider_id: '123654789',

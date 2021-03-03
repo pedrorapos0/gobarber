@@ -4,7 +4,7 @@ import FakeUsersRepository from '@modules/users/infra/typeorm/entites/repositori
 import AppError from '@shared/errors/AppError';
 
 describe('UpdateuserAvatar', () => {
-  it('should be to create a new user', async () => {
+  it('should be able to update a user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
     const fakeStorageAvatar = new FakeStorageAvatar();
 
@@ -34,7 +34,7 @@ describe('UpdateuserAvatar', () => {
       fakeStorageAvatar,
     );
 
-    expect(
+    await expect(
       UpdateUserAvatar.execute({
         user_id: 'non-existing-user',
         avatarFilename: 'avatar.jpg',
