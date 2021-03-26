@@ -4,6 +4,7 @@ import CreateUserService from '@modules/users/services/CreateUserService';
 import FakeUserRepository from '@modules/users/infra/typeorm/entites/repositories/fakes/FakeUserRepository';
 import HashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import FakeUserTokensRepository from '@modules/users/infra/typeorm/entites/repositories/fakes/FakeUserTokensRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import AppError from '@shared/errors/AppError';
 
 let fakeMailProvider: FakeMailProvider;
@@ -12,6 +13,7 @@ let hashProvider: HashProvider;
 let createUserService: CreateUserService;
 let sendForgotPasswordEmailService: SendForgotPasswordEmailService;
 let userTokensRepository: FakeUserTokensRepository;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('SendForgotPasswordEmail', () => {
   beforeEach(() => {
@@ -19,7 +21,12 @@ describe('SendForgotPasswordEmail', () => {
     usersRepository = new FakeUserRepository();
     hashProvider = new HashProvider();
     userTokensRepository = new FakeUserTokensRepository();
-    createUserService = new CreateUserService(usersRepository, hashProvider);
+    fakeCacheProvider = new FakeCacheProvider();
+    createUserService = new CreateUserService(
+      usersRepository,
+      hashProvider,
+      fakeCacheProvider,
+    );
     sendForgotPasswordEmailService = new SendForgotPasswordEmailService(
       fakeMailProvider,
       usersRepository,

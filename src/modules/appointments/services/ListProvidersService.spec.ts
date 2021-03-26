@@ -2,14 +2,20 @@ import 'reflect-metadata';
 
 import ListProvidersService from '@modules/appointments/services/ListProvidersService';
 import FakeUserRepository from '@modules/users/infra/typeorm/entites/repositories/fakes/FakeUserRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 
 let listProvidersService: ListProvidersService;
 let fakeUserRepository: FakeUserRepository;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('ListProviders', () => {
   beforeEach(() => {
     fakeUserRepository = new FakeUserRepository();
-    listProvidersService = new ListProvidersService(fakeUserRepository);
+    fakeCacheProvider = new FakeCacheProvider();
+    listProvidersService = new ListProvidersService(
+      fakeUserRepository,
+      fakeCacheProvider,
+    );
   });
 
   it('should be able list the providers', async () => {

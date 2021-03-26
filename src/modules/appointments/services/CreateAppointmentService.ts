@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import Appointment from '@modules/appointments/infra/typeorm/entites/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import INotificationRepository from '@modules/notifications/repositories/INotificationRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import AppError from '@shared/errors/AppError';
 
 interface IRequestDTO {
@@ -18,14 +19,19 @@ class CreateAppointmentService {
 
   private notificationRepository: INotificationRepository;
 
+  private cacheProvider: ICacheProvider;
+
   constructor(
     @inject('AppointmentRepository')
     appointmentRepository: IAppointmentsRepository,
     @inject('NotificationRepository')
     notificationRepository: INotificationRepository,
+    @inject('CacheProvider')
+    cacheProvider: ICacheProvider,
   ) {
     this.appointmentRepository = appointmentRepository;
     this.notificationRepository = notificationRepository;
+    this.cacheProvider = cacheProvider;
   }
 
   public async execute({
@@ -66,6 +72,9 @@ class CreateAppointmentService {
       content: `Novo agendamento para dia ${dateFormatted}`,
       recipient_id: provider_id,
     });
+    await this.cacheProvider.invalidate(
+      `provider-appointments:${provider_id}:${format(dateParsed, 'yyyy-M-d')}`,
+    );
     return appointment;
   }
 }

@@ -19,7 +19,7 @@ userRouter.post(
       name: Joi.string().required(),
       email: Joi.string().email().required(),
       password: Joi.string().required(),
-      password_confirmation: Joi.string().required().valid(Joi.ref('passwod')),
+      password_confirmation: Joi.string().required(),
     },
   }),
   usersController.create,
