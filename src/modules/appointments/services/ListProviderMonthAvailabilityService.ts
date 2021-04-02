@@ -1,5 +1,11 @@
 import { inject, injectable } from 'tsyringe';
-import { getDaysInMonth, getDate } from 'date-fns';
+import {
+  getDaysInMonth,
+  getDate,
+  isAfter,
+  isSaturday,
+  isSunday,
+} from 'date-fns';
 
 import AppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
@@ -41,13 +47,17 @@ class ListProviderMonthAvailabilityService {
     );
 
     const availabilily = eachDaysArray.map(day => {
+      const compareDate = new Date(year, month - 1, day, 23, 59, 59);
       const appointmentDay = appointmentsInMonth.filter(appointment => {
         return getDate(appointment.date) === day;
       });
 
       return {
         day,
-        available: appointmentDay.length < 10,
+        available:
+          isAfter(compareDate, new Date()) &&
+          !isSunday(new Date(year, month - 1, day)) &&
+          appointmentDay.length < 10,
       };
     });
 
