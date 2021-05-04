@@ -5,6 +5,8 @@ import Appointment from '@modules/appointments/infra/typeorm/entites/Appointment
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
 import IFindAllInDayFromProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
+import { classToClass } from 'class-transformer';
+import User from '@modules/users/infra/typeorm/entites/User';
 
 class AppointmentRepository implements IAppointmentsRepository {
   private ormRepository: Repository<Appointment>;
@@ -73,6 +75,7 @@ class AppointmentRepository implements IAppointmentsRepository {
       user_id,
     });
     await this.ormRepository.save(appointment);
+    appointment.user = classToClass(User);
     return appointment;
   }
 }

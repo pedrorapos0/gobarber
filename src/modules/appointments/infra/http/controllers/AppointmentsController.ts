@@ -1,7 +1,9 @@
 import { container } from 'tsyringe';
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
 
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
+import User from '@modules/users/infra/typeorm/entites/User';
 
 class AppointmentsControllers {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -15,6 +17,8 @@ class AppointmentsControllers {
       date,
       user_id,
     });
+
+    appointment.user = classToClass(User);
     return response.json(appointment);
   }
 }
