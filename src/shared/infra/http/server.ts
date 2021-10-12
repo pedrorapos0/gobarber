@@ -31,7 +31,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   return response.status(500).json({
     status: 'Error',
     message: 'Internal server error.',
-    detail: err,
+    detail: err.message,
   });
 });
 app.listen(3333, () => console.log('🚀️App listening on port 3333'));
